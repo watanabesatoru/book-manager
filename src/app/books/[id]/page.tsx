@@ -41,8 +41,22 @@ export default function BookDetailPage({
 
         <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="border-b border-zinc-100 bg-zinc-50 px-8 py-6 dark:border-zinc-800 dark:bg-zinc-800/50">
-            <div className="mb-1 text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
-              Book Details
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+                Book Details
+              </div>
+              <span
+                className={
+                  book.completed
+                    ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                    : "inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                }
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${book.completed ? "bg-emerald-500" : "bg-amber-500"}`}
+                />
+                {book.completed ? "Completed" : "Active"}
+              </span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
               {book.title}
