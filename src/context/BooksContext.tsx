@@ -9,6 +9,7 @@ interface BooksContextValue {
   toggleComplete: (id: string) => void;
   deleteBook: (id: string) => void;
   updateStartedAt: (id: string, date: string) => void;
+  updateAuthor: (id: string, author: string) => void;
 }
 
 const BooksContext = createContext<BooksContextValue | null>(null);
@@ -44,9 +45,15 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     );
   }
 
+  function updateAuthor(id: string, author: string) {
+    setBooks((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, author } : b))
+    );
+  }
+
   return (
     <BooksContext.Provider
-      value={{ books, addBook, toggleComplete, deleteBook, updateStartedAt }}
+      value={{ books, addBook, toggleComplete, deleteBook, updateStartedAt, updateAuthor }}
     >
       {children}
     </BooksContext.Provider>

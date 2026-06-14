@@ -10,7 +10,7 @@ export default function BookDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { books, updateStartedAt } = useBooks();
+  const { books, updateStartedAt, updateAuthor } = useBooks();
   const book = books.find((b) => b.id === id);
 
   if (!book) {
@@ -63,8 +63,24 @@ export default function BookDetailPage({
             </h1>
           </div>
 
-          <div className="px-8 py-6">
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+            <div className="flex flex-col gap-2 px-8 py-6">
+              <label
+                htmlFor="author"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Author
+              </label>
+              <input
+                id="author"
+                type="text"
+                value={book.author ?? ""}
+                onChange={(e) => updateAuthor(book.id, e.target.value)}
+                placeholder="Author name..."
+                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none transition-all placeholder:text-zinc-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-900/40"
+              />
+            </div>
+            <div className="flex flex-col gap-2 px-8 py-6">
               <label
                 htmlFor="startedAt"
                 className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
