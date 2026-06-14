@@ -10,6 +10,7 @@ interface BooksContextValue {
   deleteBook: (id: string) => void;
   updateStartedAt: (id: string, date: string) => void;
   updateAuthor: (id: string, author: string) => void;
+  updateComment: (id: string, comment: string) => void;
 }
 
 const BooksContext = createContext<BooksContextValue | null>(null);
@@ -51,9 +52,15 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     );
   }
 
+  function updateComment(id: string, comment: string) {
+    setBooks((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, comment } : b))
+    );
+  }
+
   return (
     <BooksContext.Provider
-      value={{ books, addBook, toggleComplete, deleteBook, updateStartedAt, updateAuthor }}
+      value={{ books, addBook, toggleComplete, deleteBook, updateStartedAt, updateAuthor, updateComment }}
     >
       {children}
     </BooksContext.Provider>

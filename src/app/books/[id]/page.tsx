@@ -10,7 +10,7 @@ export default function BookDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { books, updateStartedAt, updateAuthor } = useBooks();
+  const { books, updateStartedAt, updateAuthor, updateComment } = useBooks();
   const book = books.find((b) => b.id === id);
 
   if (!book) {
@@ -93,6 +93,33 @@ export default function BookDetailPage({
                 value={book.startedAt ?? ""}
                 onChange={(e) => updateStartedAt(book.id, e.target.value)}
                 className="w-48 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none transition-all focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-indigo-500 dark:focus:ring-indigo-900/40"
+              />
+            </div>
+            <div className="flex flex-col gap-2 px-8 py-6">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="comment"
+                  className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                  My Comment
+                </label>
+                <span
+                  className={`text-xs tabular-nums ${
+                    (book.comment ?? "").trim().split(/\s+/).filter(Boolean).length > 400
+                      ? "text-red-500"
+                      : "text-zinc-400 dark:text-zinc-500"
+                  }`}
+                >
+                  {(book.comment ?? "").trim().split(/\s+/).filter(Boolean).length} / 400 words
+                </span>
+              </div>
+              <textarea
+                id="comment"
+                value={book.comment ?? ""}
+                onChange={(e) => updateComment(book.id, e.target.value)}
+                placeholder="Write your thoughts about this book..."
+                rows={5}
+                className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm leading-relaxed outline-none transition-all placeholder:text-zinc-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-900/40"
               />
             </div>
           </div>
