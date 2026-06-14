@@ -15,43 +15,58 @@ export default function BookDetailPage({
 
   if (!book) {
     return (
-      <main className="mx-auto w-full max-w-xl px-4 py-12">
-        <Link
-          href="/"
-          className="mb-6 inline-block text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-        >
-          ← Back
-        </Link>
-        <p className="text-sm text-zinc-500">Book not found.</p>
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 px-4 py-16 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
+        <div className="mx-auto w-full max-w-xl">
+          <Link
+            href="/"
+            className="mb-6 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+          >
+            ← Back
+          </Link>
+          <p className="text-sm text-zinc-500">Book not found.</p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto w-full max-w-xl px-4 py-12">
-      <Link
-        href="/"
-        className="mb-6 inline-block text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-      >
-        ← Back
-      </Link>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tight">
-        {book.title}
-      </h1>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="startedAt"
-          className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 px-4 py-16 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
+      <div className="mx-auto w-full max-w-xl">
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
         >
-          Date started reading
-        </label>
-        <input
-          id="startedAt"
-          type="date"
-          value={book.startedAt ?? ""}
-          onChange={(e) => updateStartedAt(book.id, e.target.value)}
-          className="w-48 rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-400"
-        />
+          ← Back
+        </Link>
+
+        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="border-b border-zinc-100 bg-zinc-50 px-8 py-6 dark:border-zinc-800 dark:bg-zinc-800/50">
+            <div className="mb-1 text-xs font-medium uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+              Book Details
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              {book.title}
+            </h1>
+          </div>
+
+          <div className="px-8 py-6">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="startedAt"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Date started reading
+              </label>
+              <input
+                id="startedAt"
+                type="date"
+                value={book.startedAt ?? ""}
+                onChange={(e) => updateStartedAt(book.id, e.target.value)}
+                className="w-48 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none transition-all focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-indigo-500 dark:focus:ring-indigo-900/40"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

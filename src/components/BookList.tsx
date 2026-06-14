@@ -8,9 +8,11 @@ export default function BookList() {
 
   if (books.length === 0) {
     return (
-      <p className="text-center text-sm text-zinc-400 dark:text-zinc-600">
-        No books yet. Add one above.
-      </p>
+      <div className="flex flex-col items-center gap-2 py-8 text-center">
+        <div className="text-3xl">📖</div>
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">No books yet</p>
+        <p className="text-xs text-zinc-400 dark:text-zinc-600">Add your first book above to get started</p>
+      </div>
     );
   }
 
