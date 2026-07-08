@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import AddBookForm from "@/components/AddBookForm";
 import BookList from "@/components/BookList";
 import { useBooks } from "@/context/BooksContext";
@@ -15,20 +17,40 @@ const FILTERS: { label: string; value: Filter }[] = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const { books } = useBooks();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const handleLogout = async () => {
+  await supabase.auth.signOut();
+  router.push("/login");
+};
 
   const filtered = useMemo(() => {
-    const q = search.toLowerCase();
-    return books
-      .filter((b) => {
-        if (filter === "active") return !b.completed;
-        if (filter === "completed") return b.completed;
-        return true;
-      })
-      .filter((b) => b.title.toLowerCase().includes(q));
-  }, [books, search, filter]);
+  const q = search.toLowerCase();
+
+  return books
+    .filter((b) => {
+      if (filter === "active") return !b.completed;
+      if (filter === "completed") return b.completed;
+      return true;
+    })
+    .filter((b) => b.title.toLowerCase().includes(q));
+}, [books, search, filter]);
+
+useEffect(() => {
+  const checkUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      router.push("/login");
+    }
+  };
+
+  checkUser();
+}, [router]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 px-4 py-16 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
@@ -43,6 +65,14 @@ export default function Home() {
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             Keep track of what you&apos;re reading
           </p>
+          <div className="mt-4">
+  <button
+    onClick={handleLogout}
+    className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+  >
+    Logout
+  </button>
+</div>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
