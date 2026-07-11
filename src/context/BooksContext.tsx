@@ -54,13 +54,16 @@ const BooksContext = createContext<BooksContextValue | null>(null);
 export function BooksProvider({ children }: { children: ReactNode }) {
   const [books, setBooks] = useState<Book[]>([]);
 
-  useEffect(() => {
+useEffect(() => {
   const loadBooks = async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return;
+    if (!user) {
+      setBooks([]);
+      return;
+    }
 
     const { data, error } = await supabase
       .from("books")
@@ -68,15 +71,22 @@ export function BooksProvider({ children }: { children: ReactNode }) {
       .eq("user_id", user.id)
       .order("created_at", { ascending: true });
 
-    if (error) {
-      console.error("Failed to load books", error);
-      return;
+    if (!error && data) {
+      setBooks((data as BookRow[]).map(fromRow));
     }
-
-    setBooks((data as BookRow[]).map(fromRow));
   };
 
   loadBooks();
+
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(() => {
+    loadBooks();
+  });
+
+  return () => {
+    subscription.unsubscribe();
+  };
 }, []);
 
  async function addBook(title: string) {
