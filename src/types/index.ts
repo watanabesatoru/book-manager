@@ -8,4 +8,5 @@ export interface Book {
   createdAt: string;
   // coverId?: number;
   coverUrl?: string;
+  rating: number;      // ←追加
 }
