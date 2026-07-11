@@ -210,21 +210,6 @@ async function updateCoverUrl(id: string, coverUrl: string) {
     .eq("id", id);
 }
 
-async function updateCoverUrl(
-  id: string,
-  coverUrl: string
-) {
-  const { error } = await supabase
-    .from("books")
-    .update({
-      cover_url: coverUrl,
-    })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    return;
-  }
 
   setBooks((prev) =>
     prev.map((book) =>
@@ -248,7 +233,7 @@ async function updateCoverUrl(
   updateRating,
   updateCoverId,
   updateCoverUrl,
-}}
+      }}
     >
       {children}
     </BooksContext.Provider>
