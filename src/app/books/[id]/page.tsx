@@ -167,7 +167,7 @@ async function fetchBookInfo() {
     disabled={loading}
     className="w-fit rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
   >
-    {loading ? "検索中..." : "Open Libraryから取得"}
+    {loading ? "検索中..." : "Google Bookから取得"}
   </button>
 
   {error && (
