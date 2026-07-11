@@ -16,33 +16,60 @@ const FILTERS: { label: string; value: Filter }[] = [
   { label: "Completed", value: "completed" },
 ];
 
+// ←ここに追加
+const SORTS = [
+  { label: "登録順", value: "registered" },
+  { label: "タイトル順", value: "title" },
+  { label: "評価順", value: "rating" },
+  { label: "読み始めた日", value: "started" },
+];
+
 export default function Home() {
   const router = useRouter();
   const { books } = useBooks();
   const [search, setSearch] = useState("");
+
   const [filter, setFilter] = useState<Filter>("all");
+  const [sort, setSort] = useState("registered");
   const handleLogout = async () => {
   await supabase.auth.signOut();
   router.push("/login");
-};
+  };
 
   const filtered = useMemo(() => {
   const q = search.toLowerCase();
 
-  return books
+  const result = books
     .filter((b) => {
       if (filter === "active") return !b.completed;
       if (filter === "completed") return b.completed;
       return true;
     })
     .filter((b) => b.title.toLowerCase().includes(q));
-}, [books, search, filter]);
+
+    switch (sort) {
+  case "title":
+    result.sort((a, b) => a.title.localeCompare(b.title));
+    break;
+
+  case "rating":
+    result.sort((a, b) => b.rating - a.rating);
+    break;
+
+  case "started":
+    result.sort((a, b) =>
+      (b.startedAt ?? "").localeCompare(a.startedAt ?? "")
+    );
+    break;
+    }
+    return result;
+
+}, [books, search, filter, sort]);
 
 useEffect(() => {
   const checkUser = async () => {
     const {
-      data: { user },
-    } = await supabase.auth.getUser();
+     } = await supabase.auth.getUser();
 
     if (!user) {
       router.push("/login");
@@ -122,6 +149,20 @@ useEffect(() => {
                 </button>
               ))}
             </div>
+
+            <div className="mb-4">
+  <select
+    value={sort}
+    onChange={(e) => setSort(e.target.value)}
+    className="rounded-lg border border-zinc-200 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+  >
+    {SORTS.map(({ label, value }) => (
+      <option key={value} value={value}>
+        {label}
+      </option>
+    ))}
+  </select>
+</div>
 
             <BookList books={filtered} totalCount={books.length} />
           </div>
