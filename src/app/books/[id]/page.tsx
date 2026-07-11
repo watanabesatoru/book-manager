@@ -27,7 +27,10 @@ export default function BookDetailPage({
 const book = books.find((b) => b.id === id);
 
 async function fetchBookInfo() {
-
+  if (!book) {
+    console.error("Book not found");
+    return;
+  }
   console.log("fetchBookInfo started");
   console.log("API KEY =", process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY);
 
