@@ -211,14 +211,6 @@ async function updateCoverUrl(id: string, coverUrl: string) {
 }
 
 
-  setBooks((prev) =>
-    prev.map((book) =>
-      book.id === id
-        ? { ...book, coverUrl }
-        : book
-    )
-  );
-}
 
   return (
     <BooksContext.Provider
