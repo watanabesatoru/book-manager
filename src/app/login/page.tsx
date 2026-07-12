@@ -47,8 +47,11 @@ export default function LoginPage() {
 <br />
 <br />
 
-<button onClick={handleLogin}>
- Log In
+<button
+  onClick={handleLogin}
+  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+>
+  Log In
 </button>
 
 <p className="mt-4 text-center text-sm">
