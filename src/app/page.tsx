@@ -18,7 +18,8 @@ const FILTERS: { label: string; value: Filter }[] = [
 
 // ←ここに追加
 const SORTS = [
-  { label: "登録順", value: "registered" },
+  { label: "登録順（昇順）", value: "registeredAsc" },
+  { label: "登録順（降順）", value: "registeredDesc" },
   { label: "タイトル順", value: "title" },
   { label: "評価順", value: "rating" },
   { label: "読み始めた日", value: "started" },
@@ -30,7 +31,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
 
   const [filter, setFilter] = useState<Filter>("all");
-  const [sort, setSort] = useState("registered");
+  const [sort, setSort] = useState("registeredDesc");
   const handleLogout = async () => {
   await supabase.auth.signOut();
   router.push("/login");
@@ -48,6 +49,14 @@ export default function Home() {
     .filter((b) => b.title.toLowerCase().includes(q));
 
     switch (sort) {
+  case "registeredAsc":
+    result.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    break;
+
+  case "registeredDesc":
+    result.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    break;
+
   case "title":
     result.sort((a, b) => a.title.localeCompare(b.title));
     break;
@@ -61,7 +70,7 @@ export default function Home() {
       (b.startedAt ?? "").localeCompare(a.startedAt ?? "")
     );
     break;
-    }
+}
     return result;
 
 }, [books, search, filter, sort]);
