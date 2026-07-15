@@ -79,7 +79,7 @@ useEffect(() => {
   const checkUser = async () => {
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getSession();
 
     if (!user) {
       router.push("/login");

@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { supabase } from "@/lib/supabase";
 import type { Book } from "@/types";
 
+const STORAGE_KEY = "book-manager-books";
+
 interface BooksContextValue {
   books: Book[];
   addBook: (title: string) => void;
@@ -51,30 +53,63 @@ function fromRow(row: BookRow): Book {
 
 const BooksContext = createContext<BooksContextValue | null>(null);
 
+function saveBooksToLocal(books: Book[]) {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(books)
+  );
+}
+
+function loadBooksFromLocal(): Book[] {
+  const data = localStorage.getItem(STORAGE_KEY);
+
+  if (!data) {
+    return [];
+  }
+
+  return JSON.parse(data);
+}
+
 export function BooksProvider({ children }: { children: ReactNode }) {
   const [books, setBooks] = useState<Book[]>([]);
 
 useEffect(() => {
   const loadBooks = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    if (!user) {
-      setBooks([]);
-      return;
-    }
+  if (!user) {
+    setBooks([]);
+    return;
+  }
 
+  try {
     const { data, error } = await supabase
       .from("books")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: true });
 
-    if (!error && data) {
-      setBooks((data as BookRow[]).map(fromRow));
+    if (error) {
+      throw error;
     }
-  };
+
+    const books = (data as BookRow[]).map(fromRow);
+
+    setBooks(books);
+    saveBooksToLocal(books);
+
+  } catch (error) {
+    console.log("Supabaseから取得できなかったため、localStorageを使用します", error);
+
+    const books = loadBooksFromLocal();
+    setBooks(books);
+  }
+};
+ 
+  const localBooks = loadBooksFromLocal();
+setBooks(localBooks);  
 
   loadBooks();
 
