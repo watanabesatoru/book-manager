@@ -28,6 +28,7 @@ const SORTS = [
 export default function Home() {
   const router = useRouter();
   const { books } = useBooks();
+  
   const [search, setSearch] = useState("");
 
   const [filter, setFilter] = useState<Filter>("all");
@@ -79,7 +80,7 @@ useEffect(() => {
   const checkUser = async () => {
     const {
       data: { user },
-    } = await supabase.auth.getSession();
+    } = await supabase.auth.getUser();
 
     if (!user) {
       router.push("/login");

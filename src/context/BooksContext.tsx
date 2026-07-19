@@ -79,7 +79,10 @@ useEffect(() => {
     data: { user },
   } = await supabase.auth.getUser();
 
+  
+
   if (!user) {
+    
     setBooks([]);
     return;
   }
@@ -90,6 +93,8 @@ useEffect(() => {
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: true });
+
+      
 
     if (error) {
       throw error;
@@ -108,9 +113,7 @@ useEffect(() => {
   }
 };
  
-  const localBooks = loadBooksFromLocal();
-setBooks(localBooks);  
-
+  
   loadBooks();
 
   const {
